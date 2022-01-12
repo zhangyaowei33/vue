@@ -1,6 +1,10 @@
 <template>
   <div>
-  HOME
+    <i class="el-button">
+      按钮
+    </i>
+
+
   </div>
 </template>
 
@@ -9,8 +13,8 @@
 
 export default {
   name: 'Home',
-  components: {
-
-  }
+  // components: {
+  //
+  // }
 }
 </script>
