@@ -2,7 +2,7 @@
   <div style="padding: 10px">
 <!--    功能区域-->
     <div style="margin: 10px 0">
-      <el-button type="primary">新增</el-button>
+      <el-button type="primary" @click="add">新增</el-button>
       <el-button type="primary">导入</el-button>
       <el-button type="primary">导出</el-button>
     </div>
@@ -15,8 +15,11 @@
 
 <!--    数据展示区域-->
     <el-table :data="tableData" border stripe style="width: calc(100% - 30px)">
-      <el-table-column prop="date" label="日期" sortable />
-      <el-table-column prop="name" label="名字" />
+      <el-table-column prop="id" label="ID" sortable />
+      <el-table-column prop="username" label="名字" />
+      <el-table-column prop="nickName" label="昵称" />
+      <el-table-column prop="age" label="年龄" />
+      <el-table-column prop="sex" label="性别" />
       <el-table-column prop="address" label="地址" />
       <el-table-column label="操作" >
         <template #default="scope">
@@ -41,13 +44,44 @@
                      @current-change="handleCurrentChange"
                      background >
       </el-pagination>
+
+      <el-dialog v-model="dialogTableVisible" title="新增数据" width="30%">
+        <el-form :model="form" label-width="120px">
+          <el-form-item label="用户名">
+            <el-input v-model="form.username"></el-input>
+          </el-form-item>
+          <el-form-item label="昵称">
+            <el-input v-model="form.nickName"></el-input>
+          </el-form-item>
+          <el-form-item label="年龄">
+            <el-input v-model="form.age"></el-input>
+          </el-form-item>
+          <el-form-item label="性别">
+            <el-radio v-model="form.sex" label ="男">男</el-radio>
+            <el-radio v-model="form.sex" label ="女">女</el-radio>
+          </el-form-item>
+          <el-form-item label="地址">
+            <el-input type="textarea" v-model="form.address"></el-input>
+          </el-form-item>
+        </el-form>
+
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
+import { reactive, ref } from 'vue'
 
+const form = reactive({
+  id: '',
+  username: '',
+  nickName: '',
+  age: '',
+  sex: '',
+  address: '',
 
+})
 export default {
   name: 'Home',
   components: {
@@ -55,34 +89,24 @@ export default {
   },
   data(){
     return{
+      form,
+      dialogTableVisible:false,
       search:'',
       currentPage:1,
       total:10,
-      tableData :[
-        {
-          date: '2016-05-03',
-          name: '张三',
-          address: '内蒙古',
-        },
-        {
-          date: '2016-05-02',
-          name: '李四',
-          address: '黑龙江',
-        },
-        {
-          date: '2016-05-04',
-          name: '王五',
-          address: '吉林',
-        },
-        {
-          date: '2016-05-01',
-          name: '赵柳',
-          address: '辽宁',
-        },
-      ]
+      tableData :[],
+
     }
   },
   methods:{
+    add(){
+      this.dialogTableVisible = true
+      //每次打开新增弹窗，清空数据
+      this.form = {}
+    },
+    save(){
+
+    },
     handleEdit(){
 
     },
