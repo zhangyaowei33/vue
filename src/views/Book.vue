@@ -16,11 +16,10 @@
     <!--    数据展示区域-->
     <el-table :data="tableData" border stripe style="width: calc(100% - 30px)">
       <el-table-column prop="id" label="ID" sortable />
-      <el-table-column prop="username" label="名字" />
-      <el-table-column prop="nickName" label="昵称" />
-      <el-table-column prop="age" label="年龄" />
-      <el-table-column prop="sex" label="性别" />
-      <el-table-column prop="address" label="地址" />
+      <el-table-column prop="bookName" label="书名" />
+      <el-table-column prop="price" label="价格" />
+      <el-table-column prop="author" label="作者" />
+      <el-table-column prop="createTime" label="出版日期" />
       <el-table-column label="操作" >
         <template #default="scope">
           <el-button size="small" @click="handleEdit(scope.row)">编辑</el-button>
@@ -45,23 +44,20 @@
                      background >
       </el-pagination>
 
-      <el-dialog v-model="dialogTableVisible" title="新增数据" width="30%">
+      <el-dialog v-model="dialogTableVisible" title="新增/编辑数据" width="30%">
         <el-form :model="form" label-width="120px">
-          <el-form-item label="用户名">
-            <el-input v-model="form.username"></el-input>
+          <el-form-item label="书名">
+            <el-input v-model="form.bookName"></el-input>
           </el-form-item>
-          <el-form-item label="昵称">
-            <el-input v-model="form.nickName"></el-input>
+          <el-form-item label="价格">
+            <el-input v-model="form.price"></el-input>
           </el-form-item>
-          <el-form-item label="年龄">
-            <el-input v-model="form.age"></el-input>
+          <el-form-item label="作者">
+            <el-input v-model="form.author"></el-input>
           </el-form-item>
-          <el-form-item label="性别">
-            <el-radio v-model="form.sex" label ="男">男</el-radio>
-            <el-radio v-model="form.sex" label ="女">女</el-radio>
-          </el-form-item>
-          <el-form-item label="地址">
-            <el-input type="textarea" v-model="form.address"></el-input>
+          <el-form-item label="出版日期">
+            <el-date-picker format="YYYY/MM/DD" type="date" v-model="form.createTime"></el-date-picker>
+<!--            <el-input type="textarea" v-model="form.createTime"></el-input>-->
           </el-form-item>
         </el-form>
 
@@ -83,11 +79,10 @@ import {ElMessage} from 'element-plus'
 
 const form = reactive({
   id: '',
-  username: '',
-  nickName: '',
-  age: '',
-  sex: '',
-  address: '',
+  bookName: '',
+  price: '',
+  author: '',
+  createTime: '',
 
 })
 export default {

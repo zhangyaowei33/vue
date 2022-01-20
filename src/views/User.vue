@@ -45,7 +45,7 @@
                      background >
       </el-pagination>
 
-      <el-dialog v-model="dialogTableVisible" title="新增数据" width="30%">
+      <el-dialog v-model="dialogTableVisible" title="新增/编辑数据" width="30%">
         <el-form :model="form" label-width="120px">
           <el-form-item label="用户名">
             <el-input v-model="form.username"></el-input>
