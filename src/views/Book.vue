@@ -20,6 +20,15 @@
       <el-table-column prop="price" label="价格" />
       <el-table-column prop="author" label="作者" />
       <el-table-column prop="createTime" label="出版日期" />
+      <el-table-column  label="封面">
+        <template #default="scope">
+          <el-image
+              style="width: 100px; height: 100px"
+              :src="scope.row.cover"
+              :preview-src-list="[scope.row.cover]"
+          ></el-image>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" >
         <template #default="scope">
           <el-button size="small" @click="handleEdit(scope.row)">编辑</el-button>
@@ -55,9 +64,15 @@
           <el-form-item label="作者">
             <el-input v-model="form.author"></el-input>
           </el-form-item>
+
           <el-form-item label="出版日期">
             <el-date-picker format="YYYY/MM/DD" type="date" v-model="form.createTime"></el-date-picker>
 <!--            <el-input type="textarea" v-model="form.createTime"></el-input>-->
+          </el-form-item>
+          <el-form-item  label="封面">
+            <el-upload  ref="upload" action="http://localhost:8081/files/upload" :on-success="filesUploadSuccess">
+              <el-button type="primary">点击上传</el-button>
+            </el-upload>
           </el-form-item>
         </el-form>
 
@@ -83,6 +98,7 @@ const form = reactive({
   price: '',
   author: '',
   createTime: '',
+  cover:''
 
 })
 export default {
@@ -106,10 +122,16 @@ export default {
     this.load()
   },
   methods:{
+    //上传图片成功后返回连接
+    filesUploadSuccess(res){
+      console.log(res)
+      this.form.cover = res.data
+    },
     add(){
       this.dialogTableVisible = true
       //每次打开新增弹窗，清空数据
       this.form = {}
+      this.$refs['upload'].clearFiles() //清空上一次上传的图片
     },
     save(){
       if(this.form.id){//更新
@@ -164,6 +186,9 @@ export default {
     handleEdit(row){
       this.form = JSON.parse(JSON.stringify(row))
       this.dialogTableVisible = true
+      this.$nextTick( () =>{
+        this.$refs['upload'].clearFiles() //清空上一次上传的图片
+      })
 
     },
     handleDelete(id){

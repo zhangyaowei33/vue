@@ -12,7 +12,6 @@
           <el-menu-item index="/book">图书管理</el-menu-item>
 
       </el-sub-menu>
-      npm config set registry http://mirrors.cloud.tencent.com/npm/
     </el-menu>
   </div>
 </template>
