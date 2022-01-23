@@ -36,6 +36,9 @@ export default {
       rules
     }
   },
+  created() {
+    sessionStorage.removeItem("user") //登录时清除sess缓存
+  },
   methods:{
     login(){
       this.$refs['form'].validate((valid) =>{
@@ -46,6 +49,7 @@ export default {
                 type: "success",
                 message: "登录成功"
               })
+              sessionStorage.setItem("user",JSON.stringify(res.data)) //登录成功后缓存用户信息
               this.$router.push("/") //登录成功后页面自动跳转
             }else {
               ElMessage({

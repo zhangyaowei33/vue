@@ -2,9 +2,8 @@
   <div style="padding: 10px">
     <!--    功能区域-->
     <div style="margin: 10px 0">
-      <el-button type="primary" @click="add">新增</el-button>
-      <el-button type="primary">导入</el-button>
-      <el-button type="primary">导出</el-button>
+      <el-button type="primary" @click="add" v-if = "user.role ===1">新增</el-button>
+
     </div>
 
     <!--    搜索区域-->
@@ -88,7 +87,7 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 import request from "@/utils/request";
 import {ElMessage} from 'element-plus'
 
@@ -108,6 +107,7 @@ export default {
   },
   data(){
     return{
+      user:{},
       form,
       dialogTableVisible:false,
       search:'',
@@ -119,6 +119,15 @@ export default {
     }
   },
   created() {
+    let userStr = sessionStorage.getItem("user") || "{}"
+    this.user = JSON.parse(userStr)
+
+    //请求服务端，确认当前用户的合法信息
+    request.get("/user/" + this.user.id).then(res => {
+      if(res.code === "0"){
+        this.user = res.data
+      }
+    })
     this.load()
   },
   methods:{

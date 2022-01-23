@@ -6,7 +6,7 @@ const routes = [
     path: '/',
     name: 'Layout',
     component: Layout,
-    redirect: "/user",
+    redirect: "/book", //打开系统后打开默认页面
     children:[
       {
         path: 'user',

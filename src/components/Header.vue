@@ -4,7 +4,9 @@
     <div style="flex: 1"></div>
     <div style="width: 100px">
       <el-dropdown>
-        <span class="el-dropdown-link">张耀伟<el-icon class="el-icon--right">
+        <span class="el-dropdown-link">
+          {{user.username}}
+          <el-icon class="el-icon--right">
           <arrow-down />
           </el-icon>
         </span>
@@ -21,11 +23,26 @@
 
 <script>
 import { ArrowDown } from '@element-plus/icons-vue'
+import request from "@/utils/request";
 export default {
   name: "Header",
   components:{
     ArrowDown
-
+  },
+  data(){
+    return {
+      user:{},
+    }
+  } ,
+  created() {
+    let userStr = sessionStorage.getItem("user") || "{}"
+    this.user = JSON.parse(userStr)
+    //请求服务端，确认当前用户的合法信息
+    request.get("/user/" + this.user.id).then(res => {
+      if(res.code === "0"){
+        this.user = res.data
+      }
+    })
   }
 
 }

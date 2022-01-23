@@ -21,6 +21,13 @@
       <el-table-column prop="age" label="年龄" />
       <el-table-column prop="sex" label="性别" />
       <el-table-column prop="address" label="地址" />
+      <el-table-column  label="角色">
+        <template #default="scope">
+          <span v-if="scope.row.role === 1">管理员</span>
+          <span v-if="scope.row.role === 2">普通用户</span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="操作" >
         <template #default="scope">
           <el-button size="small" @click="handleEdit(scope.row)">编辑</el-button>
@@ -77,7 +84,7 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue'
+import { reactive} from 'vue'
 import request from "@/utils/request";
 import {ElMessage} from 'element-plus'
 
@@ -97,6 +104,7 @@ export default {
   },
   data(){
     return{
+      user:{},
       form,
       dialogTableVisible:false,
       search:'',
@@ -109,6 +117,15 @@ export default {
   },
   created() {
     this.load()
+
+    let userStr = sessionStorage.getItem("user") || "{}"
+    this.user = JSON.parse(userStr)
+    //请求服务端，确认当前用户的合法信息
+    request.get("/user/" + this.user.id).then(res => {
+      if(res.code === "0"){
+        this.user = res.data
+      }
+    })
   },
   methods:{
     add(){
