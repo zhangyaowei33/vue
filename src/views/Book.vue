@@ -28,12 +28,12 @@
           ></el-image>
         </template>
       </el-table-column>
-      <el-table-column label="操作" >
+      <el-table-column label="操作" v-if = "user.role ===1" >
         <template #default="scope">
           <el-button size="small" @click="handleEdit(scope.row)">编辑</el-button>
           <el-popconfirm title="确认删除该数据吗?" @confirm="handleDelete(scope.row.id)">
             <template #reference>
-              <el-button size="small" type="danger" >删除</el-button>
+              <el-button size="small" type="danger"  >删除</el-button>
             </template>
           </el-popconfirm>
         </template>
@@ -112,7 +112,7 @@ export default {
       dialogTableVisible:false,
       search:'',
       currentPage:1,
-      pageSize: 10,
+      pageSize: 3,
       total:0,
       tableData :[],
 

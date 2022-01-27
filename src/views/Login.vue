@@ -9,6 +9,10 @@
         <el-form-item prop="password">
           <el-input v-model="form.password" show-password></el-input>
         </el-form-item>
+        <div style="text-align: center " >
+          <el-radio v-model="form.role" label=1 >管理员</el-radio>
+          <el-radio v-model="form.role" label=2 >普通用户</el-radio>
+        </div>
         <el-form-item>
           <el-button style="width: 100%" type="primary" @click="login">登 录</el-button>
         </el-form-item>

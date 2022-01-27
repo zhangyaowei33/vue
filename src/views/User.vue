@@ -2,7 +2,7 @@
   <div style="padding: 10px">
 <!--    功能区域-->
     <div style="margin: 10px 0">
-      <el-button type="primary" @click="add">新增</el-button>
+      <el-button type="primary" @click="add" v-if = "user.role ===1">新增</el-button>
       <el-button type="primary">导入</el-button>
       <el-button type="primary">导出</el-button>
     </div>
@@ -95,7 +95,7 @@ const form = reactive({
   age: '',
   sex: '',
   address: '',
-
+  role:''
 })
 export default {
   name: 'Home',
@@ -109,7 +109,7 @@ export default {
       dialogTableVisible:false,
       search:'',
       currentPage:1,
-      pageSize: 10,
+      pageSize: 3,
       total:0,
       tableData :[],
 
