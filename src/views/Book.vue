@@ -3,7 +3,15 @@
     <!--    功能区域-->
     <div style="margin: 10px 0">
       <el-button type="primary" @click="add" v-if = "user.role ===1">新增</el-button>
-
+      <el-popconfirm
+          v-if="user.role === 1"
+          title="确定删除吗？"
+          @confirm="deleteBatch"
+      >
+        <template #reference>
+          <el-button type="danger" >批量删除</el-button>
+        </template>
+      </el-popconfirm>
     </div>
 
     <!--    搜索区域-->
@@ -13,7 +21,9 @@
     </div>
 
     <!--    数据展示区域-->
-    <el-table :data="tableData" border stripe style="width: calc(100% - 30px)">
+    <el-table :data="tableData" border stripe style="width: calc(100% - 30px)" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55">
+      </el-table-column>
       <el-table-column prop="id" label="ID" sortable />
       <el-table-column prop="bookName" label="书名" />
       <el-table-column prop="price" label="价格" />
@@ -70,6 +80,8 @@
           </el-form-item>
           <el-form-item  label="封面">
             <el-upload  ref="upload" action="http://localhost:8081/files/upload" :on-success="filesUploadSuccess">
+<!--              这里action应该将data中的filesUploadUrl传进来，但是失败了，以后看看-->
+<!--            <el-upload  ref="upload" action=filesUploadUrl :on-success="filesUploadSuccess">-->
               <el-button type="primary">点击上传</el-button>
             </el-upload>
           </el-form-item>
@@ -115,7 +127,8 @@ export default {
       pageSize: 3,
       total:0,
       tableData :[],
-
+      filesUploadUrl: "http://" + window.server.filesUploadUrl + "8081/files/upload",
+      ids: []
     }
   },
   created() {
@@ -131,6 +144,32 @@ export default {
     this.load()
   },
   methods:{
+    deleteBatch() {
+      if (!this.ids.length) {
+        ElMessage({
+          type: "warning",
+          message: "请选择数据！"
+        })
+        return
+      }
+      request.post("/book/deleteBatch", this.ids).then(res => {
+        if (res.code === '0') {
+          ElMessage({
+            type: "success",
+            message: "批量删除成功"
+          })
+          this.load()
+        } else {
+          ElMessage({
+            type: "error",
+            message: res.msg
+          })
+        }
+      })
+    },
+    handleSelectionChange(val) {
+      this.ids = val.map(v => v.id)
+    },
     //上传图片成功后返回连接
     filesUploadSuccess(res){
       console.log(res)

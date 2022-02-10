@@ -9,6 +9,12 @@
         <el-form-item prop="password">
           <el-input v-model="form.password" show-password></el-input>
         </el-form-item>
+        <el-form-item>
+          <div style="display: flex">
+            <el-input prefix-icon="el-icon-key" v-model="form.validCode" style="width: 50%;" placeholder="请输入验证码"></el-input>
+            <ValidCode @input="createValidCode" />
+          </div>
+        </el-form-item>
         <div style="text-align: center " >
           <el-radio v-model="form.role" label=1 >管理员</el-radio>
           <el-radio v-model="form.role" label=2 >普通用户</el-radio>
@@ -25,6 +31,7 @@
 <script>
 import request from "@/utils/request";
 import {ElMessage} from "element-plus";
+import ValidCode from "@/components/ValidCode";
 import {reactive} from "vue";
 
 const rules = reactive({
@@ -34,19 +41,46 @@ const rules = reactive({
 
 export default {
   name: "Login.vue",
+  components: {
+    ValidCode,
+  },
   data(){
     return{
       form:{},
-      rules
+      rules,
+      validCode: ''
+      // 加背景图片
+      // bg: {
+      //   backgroundImage: "url(" + require("@/assets/bg.jpg") + ")",
+      //   backgroundRepeat: "no-repeat",
+      //   backgroundSize: "100% 100%"
+      // }
     }
   },
   created() {
     sessionStorage.removeItem("user") //登录时清除sess缓存
   },
   methods:{
+    createValidCode(data) {
+      this.validCode = data
+    },
     login(){
       this.$refs['form'].validate((valid) =>{
         if(valid){
+          if (!this.form.validCode) {
+            ElMessage({
+              type: "error",
+              message: "请填写验证码"
+            })
+            return
+          }
+          if(this.form.validCode.toLowerCase() !== this.validCode.toLowerCase()) {
+            ElMessage({
+              type: "error",
+              message: "验证码错误"
+            })
+            return
+          }
           request.post("/user/login", this.form).then(res => {
             if(res.code === '0'){
               ElMessage({
