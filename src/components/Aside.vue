@@ -11,6 +11,7 @@
         <template #title>系统管理</template>
           <el-menu-item index="/book">图书管理</el-menu-item>
           <el-menu-item index="/user" v-if = "user.role ===1">用户管理</el-menu-item>
+          <el-menu-item index="/category" v-if = "user.role ===1">分类管理</el-menu-item>
 
       </el-sub-menu>
     </el-menu>
